@@ -63,7 +63,7 @@ export const NewsStore = props => {
         data.append('news', writeState.writeNews);
         data.append('file', writeState.picture);
         axios.post('/news', data, { cancelToken: new Axios.CancelToken(cancel => cancelPostFunc.current = cancel) }).then(result => {
-            if (result.data.count === 5) {
+            if (result.data.count === 10) {
                 newsState.news.splice(0, 1);
             };
             setNewsState({ ...newsState, news: [...newsState.news, result.data.data] });

@@ -178,7 +178,7 @@ export const LessonStore = props => {
     //тоглуулах хичээлийн ID хадгалах ийм IDтай хичээлийн мэлээллийг хадгална
     const searchLesson = (id) => {
         const lesson = lessonState.lessons.filter(el => el._id === id);
-        setLessonState({ ...lessonState, lesson, lessonID: id })
+        setLessonState({ ...lessonState, lesson, lessonID: id });
     };
 
     // устгах хичээлийн ID-г хадгалах
