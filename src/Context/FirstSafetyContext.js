@@ -31,6 +31,8 @@ export const FirstSafetyStore = props => {
 
     const cleanUpSearchFunc = useRef(null);
 
+    const token = localStorage.getItem('token');
+
     //Цэвэрлэгч функц
     const clearFunction = () => {
         if (cleanUpSearchFunc.current) cleanUpSearchFunc.current();
@@ -48,6 +50,9 @@ export const FirstSafetyStore = props => {
         if (cleanUpSearchFunc.current) cleanUpSearchFunc.current();
         setSafetyData({ ...safetyData, spinner: true });
         let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
             cancelToken: new Axios.CancelToken(cancel => cleanUpSearchFunc.current = cancel)
         };
         let select = selectName.map(el => {
@@ -101,7 +106,12 @@ export const FirstSafetyStore = props => {
 
     //Нэг технологийн карт устгах
     const deletedSafety = () => {
-        axios.delete(`/safety/${safetyID}`).then(result => {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        };
+        axios.delete(`/safety/${safetyID}`, config).then(result => {
             const data = result.data.data._id
             let array = [];
             if (safetyData.safety) {

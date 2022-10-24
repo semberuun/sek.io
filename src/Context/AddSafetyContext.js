@@ -22,6 +22,8 @@ export const AddSafetyStore = props => {
 
     const [errorAddSafety, setErrorAddSafety] = useState(null);
 
+    const token = localStorage.getItem('token');
+
     const clearFunction = () => {
         if (cancelFileUpload.current) cancelFileUpload.current();
         console.log(`AddSafetyPage цэвэрлэгч функц ажиллаж байна`);
@@ -53,7 +55,10 @@ export const AddSafetyStore = props => {
         data.append('cardname', cardName);
         data.append('selectedoption', selectedOption);
         const config = {
-            headers: { 'Content-Type': 'multipart/form-data' },
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'multipart/form-data'
+            },
             onUploadProgress: ProgressEvent => {
                 const dataLoading = Math.round((ProgressEvent.loaded / ProgressEvent.total * 100));
                 setLoaded(dataLoading);

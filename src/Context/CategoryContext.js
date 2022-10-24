@@ -37,6 +37,8 @@ export const CategoryStore = props => {
     //категори шинээр нэмэх state
     const [addCategories, setAddCategories] = useState(addCategoryState);
 
+    const token = localStorage.getItem('token');
+
     //Цэвэрлэгч функц
     const clearFunc = () => {
         if (getCategoriesClear.current) getCategoriesClear.current();
@@ -68,7 +70,13 @@ export const CategoryStore = props => {
     // бүх категориудыг дуудах
     const getCategories = (currentPage) => {
         setCategories({ ...categories, spinner: true });
-        axios.get(`/categories?page=${currentPage || 1}`, { cancelToken: new Axios.CancelToken(cancel => getCategoriesClear.current = cancel) }).then(res => {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            cancelToken: new Axios.CancelToken(cancel => getCategoriesClear.current = cancel)
+        };
+        axios.get(`/categories?page=${currentPage || 1}`, config).then(res => {
             setPagination(res.data.pagination);
             const data = res.data.data;
             setCategories({ ...categories, categories: data, spinner: false });
@@ -83,7 +91,12 @@ export const CategoryStore = props => {
     // категори устгах
     const deleteCategory = () => {
         setVerifyOpen(false);
-        axios.delete(`/categories/${categories.categoryId}`).then(result => {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        };
+        axios.delete(`/categories/${categories.categoryId}`, config).then(result => {
             const data = result.data.data._id;
             let array = [];
             if (categories.categories) {
@@ -108,6 +121,9 @@ export const CategoryStore = props => {
         data.append('form', addCategories.name);
         data.append('teacherName', addCategories.teacher);
         const config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
             onUploadProgress: ProgressEvent => {
                 const dataLoading = Math.round((ProgressEvent.loaded / ProgressEvent.total * 100));
                 setLoaded(dataLoading);

@@ -53,6 +53,8 @@ export const LessonStore = props => {
 
     const [fileName, setFileName] = useState('');
 
+    const token = localStorage.getItem('token');
+
     //Цэвэрлэгч функц
     const clearLessons = () => {
         if (cancelFileUpload.current) cancelFileUpload.current();
@@ -91,6 +93,9 @@ export const LessonStore = props => {
         data.append("video", addLesson.video);
         data.append('form', addLesson.name);
         const config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
             onUploadProgress: ProgressEvent => {
                 const dataLoading = Math.round((ProgressEvent.loaded / ProgressEvent.total * 100));
                 setLoaded(dataLoading);
@@ -121,8 +126,14 @@ export const LessonStore = props => {
 
     //Бүх хичээлийг татаж авах
     const getLessons = (id) => {
-        setLessonState({ ...lessonState, spinner: true })
-        axios.get(`categories/${id}/lessons`, { cancelToken: new Axios.CancelToken(cancel => cancelGetLessons.current = cancel) }).then(result => {
+        setLessonState({ ...lessonState, spinner: true });
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            cancelToken: new Axios.CancelToken(cancel => cancelGetLessons.current = cancel)
+        };
+        axios.get(`categories/${id}/lessons`, config).then(result => {
             setLessonState({ ...lessonState, lessons: result.data.data, spinner: false });
             setName(result.data.teacherName);
         }).catch(err => {
@@ -136,9 +147,14 @@ export const LessonStore = props => {
 
     //Бүх комментийг татаж авах
     const getComments = (id) => {
-        console.log('first')
         setWriteState({ ...writeState, spinner: true });
-        axios(`categories/${id}/comment`, { cancelToken: new Axios.CancelToken(cancel => cancelGetComments.current = cancel) }).then(result => {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            cancelToken: new Axios.CancelToken(cancel => cancelGetComments.current = cancel)
+        };
+        axios.get(`categories/${id}/comment`, config).then(result => {
             setWriteState({ ...writeState, comments: result.data.data, spinner: false });
         }).catch(err => {
             if (Axios.isCancel(err)) {
@@ -165,7 +181,13 @@ export const LessonStore = props => {
         data.append('phone', ctx.form.phone);
         data.append('comment', writeState.writeComments);
         data.append('user', ctx.form.userId);
-        axios.post(`/categories/${id}/comment`, data, { cancelToken: new Axios.CancelToken(cancel => cancelPostComment.current = cancel) }).then(result => {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            cancelToken: new Axios.CancelToken(cancel => cancelPostComment.current = cancel)
+        };
+        axios.post(`/categories/${id}/comment`, data, config).then(result => {
             setWriteState({ ...writeState, comments: [...writeState.comments, result.data.data], verifyOpen: false, writeComments: "" });
         }).catch(err => {
             if (Axios.isCancel(err)) {
@@ -187,7 +209,12 @@ export const LessonStore = props => {
     };
     // Нэг хичээл устгах
     const deletedLesson = () => {
-        axios.delete(`/lessons/${lessonState.lessonID}`).then(result => {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+        };
+        axios.delete(`/lessons/${lessonState.lessonID}`, config).then(result => {
             const data = result.data.data._id;
             let array = [];
             if (lessonState.lessons) {
