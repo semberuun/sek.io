@@ -9,6 +9,7 @@ const initialState = {
     lastname: null,
     phone: null,
     role: null,
+    right: null,
     userId: null,
     views: [],
     spinner: true,
@@ -18,8 +19,14 @@ const initialState = {
 export const UserStore = props => {
 
     const [form, setForm] = useState(initialState);
+
+    //Нэвтэрсэн эсэх
     const [user, setUser] = useState(false);
 
+    //Бүртгэх товчлуур
+    const [register, setRegister] = useState(null);
+
+    const token = localStorage.getItem('token');
 
     //Хэрэглэгч нэвтрэх
     const handleLogedIn = async (data) => {
@@ -37,6 +44,7 @@ export const UserStore = props => {
                 lastname: result.data.data.lastname,
                 phone: result.data.data.phone,
                 role: result.data.data.role,
+                right: result.data.data.right,
                 userId: result.data.data._id,
                 views: result.data.data.views,
                 spinner: false
@@ -71,6 +79,7 @@ export const UserStore = props => {
                 lastname: result.data.data.lastname,
                 phone: result.data.data.phone,
                 role: result.data.data.role,
+                right: result.data.data.right,
                 userId: result.data.data._id,
                 views: result.data.data.views
             });
@@ -81,16 +90,36 @@ export const UserStore = props => {
     };
 
     //хэрэглэгчийн үзсэн хичээлийг хадгалах
-    const lessonRegister = (data, lessonId) => {
+    const lessonRegister = (data, lessonId, lessonName) => {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        };
         const array = form.views;
-        const variable = array.filter(el => el === lessonId);
+        const variable = array.filter(el => el.id === lessonId);
         if (variable.length === 0) {
-            array.push(lessonId);
+            const viewLesson = {
+                id: lessonId,
+                name: lessonName
+            };
+            array.push(viewLesson);
             setForm({ ...form, views: array });
-            axios.put(`/user/${form.userId}`, data).then(result => {
+            axios.put(`/user/${form.userId}`, data, config).then(result => {
                 console.log(result.data);
             }).catch(err => console.log(err));
-        }
+        };
+    };
+
+    // Бүртгэх товчлуурыг ажлуулах болих
+    const loginRegister = () => {
+        axios.get('/register').then(res => {
+            if (res.data === '') {
+                setRegister(null);
+            } else {
+                setRegister(res.data.data);
+            };
+        }).catch(err => console.log(err));
     };
 
     return (
@@ -98,6 +127,9 @@ export const UserStore = props => {
             value={{
                 form,
                 user,
+                register,
+                setRegister,
+                loginRegister,
                 handleRegister,
                 handleLogout,
                 handleLogedIn,

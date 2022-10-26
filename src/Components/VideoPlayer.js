@@ -14,7 +14,8 @@ export default function VideoPlayer() {
     const videoEnd = () => {
         const data = new FormData();
         data.append('views', LessonCtx.lessonState.lessonID);
-        ctx.lessonRegister(data, LessonCtx.lessonState.lessonID);
+        data.append('name', LessonCtx.lessonState.lesson[0].name);
+        ctx.lessonRegister(data, LessonCtx.lessonState.lessonID, LessonCtx.lessonState.lesson[0].name);
     };
 
     return (

@@ -26,10 +26,12 @@ export default function App() {
 
   useEffect(() => {
     RefreshFunc.current();
+    register.current();
   }, []);
 
   const ctx = useContext(UserContext);
   const RefreshFunc = useRef();
+  const register = useRef(null);
 
   const refFunc = () => {
     const token = localStorage.getItem('token');
@@ -46,6 +48,7 @@ export default function App() {
   };
 
   RefreshFunc.current = refFunc;
+  register.current = ctx.loginRegister;
 
   return (
     <div className=" container">

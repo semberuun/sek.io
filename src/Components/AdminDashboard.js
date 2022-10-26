@@ -3,6 +3,7 @@ import AdminContext from '../Context/AdminContext';
 import UserGrafic from './UserGrafic';
 import UserTable from './UserTable';
 import SearchUsers from './UserSearch';
+import OpenUser from './OpenUser';
 
 
 function AdminDashboard() {
@@ -12,6 +13,7 @@ function AdminDashboard() {
     return (
         <div className='w-full md:w-4/6 mt-10 2xl:ml-10 2xl:w-5/6 '>
             <h1 className=' mb-4 font-main text-gray-500 font-bold text-2xl pl-4'>Хяналтын самбар</h1>
+            {AdminCtx.userOpen.open ? <OpenUser /> : null}
             <div className=' 2xl:flex'>
                 <div className='flex justify-center mb-2 2xl:mr-1'>
                     <div className=' flex items-center justify-between w-96 bg-yellow-400 h-36  rounded-lg '>

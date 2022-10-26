@@ -30,6 +30,10 @@ export default function UserTable() {
         AdminCtx.deleteUser(id);
     };
 
+    const onclick = (id) => {
+        AdminCtx.getUser(id);
+    };
+
     return (
         <>
             {AdminCtx.verifyOpen && < VerifyBtn verify={AdminCtx.setVerifyOpen} universal={AdminCtx.deletedUser} />}
@@ -48,7 +52,7 @@ export default function UserTable() {
                                     и-майл
                                 </th>
                                 <th className='py-3 px-6'>
-                                    Үзсэн хичээл
+                                    профайл
                                 </th>
                                 <th className='py-3 px-6'>
                                 </th>
@@ -57,8 +61,8 @@ export default function UserTable() {
                         <tbody>
                             {AdminCtx.userState.users ? AdminCtx.userState.users.map(el => {
                                 return (
-                                    <tr key={el._id} className="bg-gray-50 ">
-                                        <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap ">
+                                    <tr key={el._id} className={`bg-gray-50 ${el.right ? null : 'text-blue-500'}`} >
+                                        <th scope="row" className="py-4 px-6 font-medium whitespace-nowrap ">
                                             {el.firstname}
                                         </th>
                                         <td className="py-4 px-6">
@@ -67,8 +71,8 @@ export default function UserTable() {
                                         <td className="py-4 px-6">
                                             {el.email}
                                         </td>
-                                        <td className="py-4 px-6">
-                                            Үзсэн хичээлүүд
+                                        <td onClick={() => onclick(el._id)} className="py-4 px-6 text-blue-700 cursor-pointer hover:text-yellow-500">
+                                            Зочлох
                                         </td>
                                         <td className="py-4 px-6">
                                             {

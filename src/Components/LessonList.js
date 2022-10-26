@@ -40,7 +40,7 @@ export default function LessonList() {
     };
 
     const viewLesson = (el) => {
-        const data = ctx.form.views.filter(e => e === el._id);
+        const data = ctx.form.views.filter(e => e.id === el._id);
         if (data.length === 0) {
             return 'text-gray-600';
         } else {

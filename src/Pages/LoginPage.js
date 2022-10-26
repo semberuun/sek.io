@@ -63,7 +63,7 @@ export default function LoginPage() {
                     </form>
                     <div>
                         <Link to="/signin">
-                            <button className=' mb-4  w-full py-2 text-yellow-600 uppercase hover:text-yellow-400 '>
+                            <button disabled={ctx.register} className=' mb-4  w-full py-2 text-yellow-600 uppercase hover:text-yellow-400 '>
                                 Бүртгүүлэх
                             </button>
                         </Link>
