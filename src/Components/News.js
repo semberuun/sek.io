@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import Slider from "react-slick";
 import NewsContext from '../Context/NewsContext';
+import UserContext from '../Context/UserContext';
 
 function News() {
 
     const NewsCtx = useContext(NewsContext);
+    const ctx = useContext(UserContext);
 
     const settings = {
         dots: true,
@@ -56,7 +58,7 @@ function News() {
                                 <div className="p-6 bg-gray-100">
                                     <h5 className="text-sm text-blue-600 font-semibold mb-2">{`${el.name.slice(0, 25)} ...`}</h5>
                                     <p className="text-gray-700 text-xs mb-4">{`${el.news.slice(0, 200)} ...`}</p>
-                                    <button onClick={() => onclick(el._id)} type="button" className=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Унших</button>
+                                    <button disabled={ctx.user && ctx.form.right ? false : true} onClick={() => onclick(el._id)} type="button" className=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Унших</button>
                                 </div>
                             </div>
                         </div>

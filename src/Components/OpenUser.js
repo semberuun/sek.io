@@ -13,6 +13,16 @@ export default function OpenUser() {
         AdminCtx.putRight();
     };
 
+    const passwordOnchange = (e) => {
+        e.preventDefault();
+        AdminCtx.setResetPassword(e.target.value);
+        AdminCtx.setErrorResetPassword(null);
+    };
+
+    const resetPasswordClick = () => {
+        AdminCtx.postResetPassword();
+    };
+
     return (
         <div className=' fixed top-0 left-0 z-10 w-full h-full bg-black bg-opacity-60'>
             <div className='bg-gray-100 rounded-lg shadow-lg w-2/3 h-auto z-50 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 '>
@@ -43,12 +53,13 @@ export default function OpenUser() {
                     </div>
                     <div className=' w-full h-auto xl:w-1/3 xl:ml-6'>
                         <div className='w-full'>
-                            <button onClick={() => rightClick()} className='mt-20 " inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0  active:shadow-lg transition duration-150 ease-in-out"'>{AdminCtx.userOpen.user[0].right ? "Хэрэглэгчийн эрхийг идэвхгүй болгох" : "Хэрэглэгчийн эрхийг идэвхтэй болгох"}</button>
+                            <button onClick={() => rightClick()} className='mt-20 " inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg  focus:shadow-lg focus:outline-none focus:ring-0  active:shadow-lg transition duration-150 ease-in-out"'>{AdminCtx.userOpen.user[0].right ? "Хэрэглэгчийн эрхийг идэвхгүй болгох" : "Хэрэглэгчийн эрхийг идэвхтэй болгох"}</button>
                         </div>
                         <p className='mt-10 mb-4 font-serif font-semibold text-gray-600 '>Хэрэглэгчийн нууц үг солих :</p>
                         <div className='w-full'>
-                            <input className=' w-full bg-gray-100 border mb-6 rounded p-1 focus:outline-none' type='password' name='password' placeholder='Шинэ нууц үг оруулна уу...' />
-                            <button className=' w-1/2 mt-2 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0  active:shadow-lg transition duration-150 ease-in-out"'>илгээх</button>
+                            <input onChange={passwordOnchange} className=' w-full bg-gray-100 border mb-6 rounded p-1 focus:outline-none' type='password' name='password' placeholder='Шинэ нууц үг оруулна уу...' />
+                            {AdminCtx.errorResetPassword && <p className=' text-red-500 text-xs text-center'>{AdminCtx.errorResetPassword}</p>}
+                            <button onClick={() => resetPasswordClick()} className=' w-1/2 mt-2 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg  focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out"'>илгээх</button>
                         </div>
                     </div>
                 </div>

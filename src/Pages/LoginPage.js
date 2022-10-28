@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import LoginForm from '../Components/LoginForm';
-import { useNavigate } from 'react-router-dom';
 import { SpinnerCircular } from 'spinners-react';
 import UserContext from '../Context/UserContext';
 
@@ -19,7 +18,6 @@ const schema = yup
 export default function LoginPage() {
 
     const ctx = useContext(UserContext);
-    const navigate = useNavigate();
 
     const {
         register,
@@ -31,7 +29,6 @@ export default function LoginPage() {
 
     const onSubmit = (data) => {
         ctx.handleLogedIn(data);
-        navigate('/');
     };
 
     return (

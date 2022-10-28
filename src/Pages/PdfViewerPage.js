@@ -21,7 +21,13 @@ export default function PdfViewerPage() {
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
     useEffect(() => {
-        axios.get(`/safety/${variable.current}`).then(result => setUrl(result.data.data)).catch(err => console.log(err));
+        const token = localStorage.getItem('token');
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        };
+        axios.get(`/safety/${variable.current}`, config).then(result => setUrl(result.data.data)).catch(err => console.log(err));
     }, []);
 
     return (

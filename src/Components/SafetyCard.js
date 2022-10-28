@@ -38,7 +38,7 @@ export default function SafetyCard() {
                     {FirstSafetyCtx.safetyData.safety.map(el => {
                         return (
                             <div key={el._id} className=' flex w-full'>
-                                <Link to={`/firstsafety/${el._id}`} className='w-11/12'>
+                                <Link to={`/firstsafety/${ctx.user && ctx.form.right ? el._id : '#'}`} className='w-11/12'>
                                     <div className=' font-sans text-gray-700 border-collapse border rounded-xl border-yellow-500 mb-4 p-1 pl-10 transform hover:text-white hover:bg-yellow-500 hover:cursor-pointer hover:scale-105 duration-200'>
                                         <p>{el.cardnumber}</p>
                                         <p>{el.cardname}</p>

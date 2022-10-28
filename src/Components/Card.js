@@ -53,14 +53,10 @@ export default function Card(props) {
                     <h1 className='pl-1 text-gray-700'>{props.category.viewCount} ажилтан үзсэн</h1>
                 </div>
                 <Link to={'/categories/' + props.category._id}>
-                    <div className=' flex justify-center items-center w-full h-10 border-2 rounded-xl shadow-md border-yellow-500 bg-yellow-500 hover: cursor-pointer hover:bg-yellow-400 hover:border-yellow-400 transition-colors duration-300 ease-out'>
-                        <button className=' uppercase text-white font-sans'>Үзэх</button>
-                    </div>
+                    <button disabled={ctx.user && ctx.form.right ? false : true} className='w-full uppercase text-white font-sans h-10 border-2 rounded-xl shadow-md border-yellow-500 bg-yellow-500 hover: cursor-pointer hover:bg-yellow-400 hover:border-yellow-400 transition-colors duration-300 ease-out '>Үзэх</button>
                 </Link>
                 {ctx.form.role === 'admin' ?
-                    <div onClick={() => onClick(props.category._id)} className=' flex justify-center items-center w-full h-10 mt-4 border-2 rounded-xl shadow-md border-gray-900 bg-gray-900 hover: cursor-pointer hover:bg-gray-700 hover:border-gray-700 transition-colors duration-300 ease-out'>
-                        <button className=' uppercase text-white font-sans'>Устгах</button>
-                    </div> : null}
+                    <button onClick={() => onClick(props.category._id)} className='w-full h-10 mt-4 border-2 rounded-xl shadow-md border-gray-900 bg-gray-900 hover: cursor-pointer hover:bg-gray-700 hover:border-gray-700 transition-colors duration-300 ease-out uppercase text-white font-sans'>Устгах</button> : null}
             </div>
         </>
     )

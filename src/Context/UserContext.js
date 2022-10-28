@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from '../axios';
+import { useNavigate } from 'react-router-dom';
 
 const UserContext = React.createContext();
 
@@ -23,10 +24,9 @@ export const UserStore = props => {
     //Нэвтэрсэн эсэх
     const [user, setUser] = useState(false);
 
-    //Бүртгэх товчлуур
-    const [register, setRegister] = useState(null);
-
     const token = localStorage.getItem('token');
+
+    const navigate = useNavigate();
 
     //Хэрэглэгч нэвтрэх
     const handleLogedIn = async (data) => {
@@ -49,11 +49,11 @@ export const UserStore = props => {
                 views: result.data.data.views,
                 spinner: false
             });
+            navigate('/');
         }).catch(err => {
             setForm({ ...form, error: err.response.data.error.message, spinner: true });
         });
     };
-
 
     //Хэрэглэгч бүртгүүлэх
     const handleRegister = (data) => {
@@ -111,25 +111,11 @@ export const UserStore = props => {
         };
     };
 
-    // Бүртгэх товчлуурыг ажлуулах болих
-    const loginRegister = () => {
-        axios.get('/register').then(res => {
-            if (res.data === '') {
-                setRegister(null);
-            } else {
-                setRegister(res.data.data);
-            };
-        }).catch(err => console.log(err));
-    };
-
     return (
         <UserContext.Provider
             value={{
                 form,
                 user,
-                register,
-                setRegister,
-                loginRegister,
                 handleRegister,
                 handleLogout,
                 handleLogedIn,

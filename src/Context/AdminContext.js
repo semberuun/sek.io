@@ -26,6 +26,9 @@ export const AdminStore = props => {
     const [search, setSearch] = useState('');
     const [userOpen, setUserOpen] = useState(userOpenState);
 
+    const [resetPassword, setResetPassword] = useState(null);
+    const [errorResetPassword, setErrorResetPassword] = useState(null);
+
     //Баталгаажуулалт state
     const [verifyOpen, setVerifyOpen] = useState(false);
 
@@ -40,15 +43,6 @@ export const AdminStore = props => {
         setSearch('');
         setVerifyOpen(false);
         if (cleanUpSearchFunc.current) cleanUpSearchFunc.current();
-    };
-
-    const getRegister = () => {
-        let config = {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        };
-        axios.put('/register', config).then(result => console.log(result)).catch(err => console.log(err));
     };
 
     // Бүх хэрэглэгчийг татах
@@ -85,7 +79,7 @@ export const AdminStore = props => {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
-        }
+        };
         axios.delete(`/user/${userState.deleteUserID}`, config).then(result => {
             const data = result.data.data._id;
             let array = [];
@@ -110,14 +104,33 @@ export const AdminStore = props => {
 
     // Хэрэглэгчийн эрхийг нээх хаах
     const putRight = () => {
-        axios.put(`/user/${userOpen.user[0]._id}/right`).then(result => {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        };
+        axios.put(`/user/${userOpen.user[0]._id}/change-right`, null, config).then(result => {
             userOpen.user[0].right = result.data.data;
             setUserOpen({ ...userOpen, user: userOpen.user });
         }).catch(err => console.log(err));
     };
 
+    //Хэрэглэгчийн цонх хаах
     const closeUser = () => {
         setUserOpen(userOpenState);
+        setResetPassword(null);
+    };
+    // Хэрэглэгчийн нууц үг солих ADMIN
+    const postResetPassword = () => {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        };
+        const data = new FormData();
+        data.append('password', resetPassword);
+        data.append('phone', userOpen.user[0].phone);
+        axios.post('/user/reset-password', data, config).then(result => console.log(result)).catch(err => setErrorResetPassword(err.response.data.error.message));
     };
 
     return (
@@ -128,9 +141,12 @@ export const AdminStore = props => {
                 search,
                 verifyOpen,
                 userOpen,
+                errorResetPassword,
+                setErrorResetPassword,
+                setResetPassword,
+                postResetPassword,
                 putRight,
                 closeUser,
-                getRegister,
                 getUsers,
                 getUser,
                 setSearch,
