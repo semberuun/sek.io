@@ -11,7 +11,7 @@ function VerifyBtn(props) {
     }
 
     return (
-        <div className='fixed top-0 left-0 z-10 w-full h-full bg-black bg-opacity-60'>
+        <div className='fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-60'>
             <div className=' bg-gray-200 rounded-lg shadow-lg w-96 h-52 z-50 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 '>
                 <div className='w-full h-full flex flex-col justify-center items-center'>
                     <h1 className='font-main mb-8 text-gray-700'>

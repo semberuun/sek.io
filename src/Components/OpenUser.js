@@ -16,7 +16,6 @@ export default function OpenUser() {
     const passwordOnchange = (e) => {
         e.preventDefault();
         AdminCtx.setResetPassword(e.target.value);
-        AdminCtx.setErrorResetPassword(null);
     };
 
     const resetPasswordClick = () => {
@@ -53,11 +52,11 @@ export default function OpenUser() {
                     </div>
                     <div className=' w-full h-auto xl:w-1/3 xl:ml-6'>
                         <div className='w-full'>
-                            <button onClick={() => rightClick()} className='mt-20 " inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg  focus:shadow-lg focus:outline-none focus:ring-0  active:shadow-lg transition duration-150 ease-in-out"'>{AdminCtx.userOpen.user[0].right ? "Хэрэглэгчийн эрхийг идэвхгүй болгох" : "Хэрэглэгчийн эрхийг идэвхтэй болгох"}</button>
+                            <button onClick={() => rightClick()} className={`mt-20 inline-block px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded shadow-md ${AdminCtx.userOpen.user[0].right ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-blue-600 hover:bg-blue-700'} hover:shadow-lg  focus:shadow-lg focus:outline-none focus:ring-0  active:shadow-lg transition duration-150 ease-in-out`}>{AdminCtx.userOpen.user[0].right ? "Хэрэглэгчийн эрхийг идэвхгүй болгох" : "Хэрэглэгчийн эрхийг идэвхтэй болгох"}</button>
                         </div>
                         <p className='mt-10 mb-4 font-serif font-semibold text-gray-600 '>Хэрэглэгчийн нууц үг солих :</p>
                         <div className='w-full'>
-                            <input onChange={passwordOnchange} className=' w-full bg-gray-100 border mb-6 rounded p-1 focus:outline-none' type='password' name='password' placeholder='Шинэ нууц үг оруулна уу...' />
+                            <input onChange={passwordOnchange} value={AdminCtx.resetPassword} className=' w-full bg-gray-100 border mb-6 rounded p-1 focus:outline-none' type='password' name='password' placeholder='Шинэ нууц үг оруулна уу...' />
                             {AdminCtx.errorResetPassword && <p className=' text-red-500 text-xs text-center'>{AdminCtx.errorResetPassword}</p>}
                             <button onClick={() => resetPasswordClick()} className=' w-1/2 mt-2 inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg  focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out"'>илгээх</button>
                         </div>

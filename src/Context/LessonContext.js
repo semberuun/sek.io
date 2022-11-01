@@ -29,6 +29,12 @@ const writeComment = {
     errorComments: null
 };
 
+const deleteCommentState = {
+    id: null,
+    verifyOpen: false,
+    deleteError: null
+};
+
 export const LessonStore = props => {
 
     const cancelFileUpload = useRef(null);
@@ -52,6 +58,8 @@ export const LessonStore = props => {
     const [name, setName] = useState(null);
 
     const [fileName, setFileName] = useState('');
+
+    const [deleteComment, setDeleteComment] = useState(deleteCommentState);
 
     const token = localStorage.getItem('token');
 
@@ -188,7 +196,7 @@ export const LessonStore = props => {
             cancelToken: new Axios.CancelToken(cancel => cancelPostComment.current = cancel)
         };
         axios.post(`/categories/${id}/comment`, data, config).then(result => {
-            setWriteState({ ...writeState, comments: [...writeState.comments, result.data.data], verifyOpen: false, writeComments: "" });
+            setWriteState({ ...writeState, comments: [result.data.data, ...writeState.comments], verifyOpen: false, writeComments: "" });
         }).catch(err => {
             if (Axios.isCancel(err)) {
                 console.log('Comment POST хийж байхад page-ээс гарсан');
@@ -236,7 +244,40 @@ export const LessonStore = props => {
 
     // Баталгаажуулах хичээл
     const openVerifyLesson = (value) => {
-        setLessonState({ ...lessonState, verifyOpen: value });
+        setLessonState({ ...lessonState, verifyOpen: value, lessonID: null });
+    };
+
+    const deleteCommentId = (id) => {
+        setDeleteComment({ ...deleteComment, id, verifyOpen: true });
+    };
+
+    //Нэг коммент устгах
+    const deletedComment = () => {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+        };
+        axios.delete(`/comments/${deleteComment.id}`, config).then(result => {
+            const data = result.data.data._id;
+            let array = [];
+            if (writeState.comments) {
+                writeState.comments.map(el => {
+                    return array.push(el._id);
+                });
+            };
+            const index = array.indexOf(data);
+            if (index > -1) {
+                writeState.comments.splice(index, 1);
+                setWriteState({ ...writeState, comments: [...writeState.comments] });
+            };
+            setDeleteComment({ ...deleteComment, verifyOpen: false, id: null });
+        }).catch(err => setDeleteComment({ ...deleteComment, deleteError: err }));
+    };
+
+
+    const closeTab = (value) => {
+        setDeleteComment({ ...deleteComment, id: null, verifyOpen: value });
     };
 
     return <LessonContext.Provider value={{
@@ -246,6 +287,7 @@ export const LessonStore = props => {
         name,
         loaded,
         fileName,
+        deleteComment,
         setName,
         searchLesson,
         getLessons,
@@ -263,7 +305,10 @@ export const LessonStore = props => {
         clearLessons,
         fileCancelUpload,
         clearComments,
-        setFileName
+        setFileName,
+        deleteCommentId,
+        deletedComment,
+        closeTab
     }}>{props.children}</LessonContext.Provider>
 };
 

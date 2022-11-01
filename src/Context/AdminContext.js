@@ -26,7 +26,7 @@ export const AdminStore = props => {
     const [search, setSearch] = useState('');
     const [userOpen, setUserOpen] = useState(userOpenState);
 
-    const [resetPassword, setResetPassword] = useState(null);
+    const [resetPassword, setResetPassword] = useState('');
     const [errorResetPassword, setErrorResetPassword] = useState(null);
 
     //Баталгаажуулалт state
@@ -55,7 +55,6 @@ export const AdminStore = props => {
             },
             cancelToken: new Axios.CancelToken(cancel => cleanUpSearchFunc.current = cancel)
         };
-
         axios.get(`${'/user?search=' + search + '&page=' + currentPage}`, config).then(result => {
             setUserState({ ...userState, users: result.data.data.users, userCount: result.data.data.userCount, sumCategory: result.data.data.sumCategory, sumLessons: result.data.data.sumLessons, spinner: false });
             setPagination(result.data.pagination);
@@ -118,7 +117,7 @@ export const AdminStore = props => {
     //Хэрэглэгчийн цонх хаах
     const closeUser = () => {
         setUserOpen(userOpenState);
-        setResetPassword(null);
+        setResetPassword('');
     };
     // Хэрэглэгчийн нууц үг солих ADMIN
     const postResetPassword = () => {
@@ -130,7 +129,14 @@ export const AdminStore = props => {
         const data = new FormData();
         data.append('password', resetPassword);
         data.append('phone', userOpen.user[0].phone);
-        axios.post('/user/reset-password', data, config).then(result => console.log(result)).catch(err => setErrorResetPassword(err.response.data.error.message));
+        axios.post('/user/reset-password', data, config).then(result => {
+            console.log(result);
+            setResetPassword('');
+            setErrorResetPassword(null);
+        }).catch(err => {
+            setErrorResetPassword(err.response.data.error.message);
+            setResetPassword('');
+        });
     };
 
     return (
@@ -142,6 +148,7 @@ export const AdminStore = props => {
                 verifyOpen,
                 userOpen,
                 errorResetPassword,
+                resetPassword,
                 setErrorResetPassword,
                 setResetPassword,
                 postResetPassword,

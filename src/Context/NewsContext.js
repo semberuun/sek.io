@@ -34,6 +34,8 @@ export const NewsStore = props => {
 
     const [openNews, setOpenNews] = useState(openNew);
 
+    const token = localStorage.getItem('token');
+
     const cancelPostFunc = useRef(null);
     const cancelGetFunc = useRef(null);
 
@@ -62,18 +64,24 @@ export const NewsStore = props => {
         data.append("name", writeState.title);
         data.append('news', writeState.writeNews);
         data.append('file', writeState.picture);
-        axios.post('/news', data, { cancelToken: new Axios.CancelToken(cancel => cancelPostFunc.current = cancel) }).then(result => {
+        let config = {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            cancelToken: new Axios.CancelToken(cancel => cancelPostFunc.current = cancel)
+        };
+        axios.post('/news', data, config).then(result => {
             if (result.data.count === 10) {
-                newsState.news.splice(0, 1);
+                newsState.news.splice(8, 1);
             };
-            setNewsState({ ...newsState, news: [...newsState.news, result.data.data] });
+            setNewsState({ ...newsState, news: [result.data.data, ...newsState.news] });
             setWriteState({ ...writeState, title: '', writeNews: '', picture: null });
             setFileName('');
             setVerifyNews(false);
         }).catch(err => {
             if (Axios.isCancel(err)) {
                 console.log('NEWS context Цуцаллаа...');
-            }
+            };
             setWriteState({ ...writeState, errorWriteState: err });
             setFileName('');
             setVerifyNews(false);
